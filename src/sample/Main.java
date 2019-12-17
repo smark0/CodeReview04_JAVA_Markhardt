@@ -16,6 +16,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 public class Main extends Application {
 
     @Override
@@ -83,12 +87,19 @@ public class Main extends Application {
 
         HBox main= new HBox(gridPane);
 
+        System.out.println(System.getProperty("user.dir"));
+
         list.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
             txtProductName.setText(newValue.getProductName());
             txtQuantity.setText(newValue.getQuantity());
             txtOldPrice.setText(Double.toString(newValue.getOldPrice()));
             txtNewPrice.setText(Double.toString(newValue.getNewPrice()));
-            javafx.scene.image.Image image = new Image(newValue.getImagePath());
+            Image image = null;
+            try {
+                image = new Image(new FileInputStream(newValue.getImagePath()));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
             ImageView img = new ImageView(image);
             img.setFitHeight(250);
             img.setFitWidth(250);
